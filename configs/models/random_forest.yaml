@@ -1,0 +1,6 @@
+# Pixel/object-based baseline, in the spirit of classical high-mountain pipelines
+# (spectral + terrain + climate features → RF). Every FM must beat this.
+name: random_forest
+framework: sklearn
+params: {n_estimators: 500, max_features: sqrt, min_samples_leaf: 2, class_weight: balanced_subsample, n_jobs: -1}
+features: [spectral, indices, terrain, climate]

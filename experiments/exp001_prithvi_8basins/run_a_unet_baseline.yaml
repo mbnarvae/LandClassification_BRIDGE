@@ -1,0 +1,26 @@
+# RUN A — plain UNet (ResNet-50 encoder, trained from scratch) on the 12 stacked bands.
+# Not a foundation model: this is the bar Prithvi must clear (UNets beat FMs on several PANGAEA tasks).
+trainer:
+  logger:
+    init_args: {name: run_a_unet_baseline}
+data:
+  init_args:
+    expand_temporal_dimension: false
+    # 12 channels: dry + wet; means/stds repeated per frame
+    dataset_bands: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+    output_bands: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
+    means: [1087.0, 1342.0, 1433.0, 2734.0, 1958.0, 1363.0, 1087.0, 1342.0, 1433.0, 2734.0, 1958.0, 1363.0]
+    stds: [2248.0, 2179.0, 2178.0, 1850.0, 1242.0, 1049.0, 2248.0, 2179.0, 2178.0, 1850.0, 1242.0, 1049.0]
+model:
+  init_args:
+    model_args:
+      backbone: timm_resnet50
+      backbone_pretrained: false
+      backbone_in_chans: 12
+      backbone_features_only: true
+      decoder: UNetDecoder
+      decoder_channels: [512, 256, 128, 64, 32]
+      head_dropout: 0.1
+      num_classes: 19
+optimizer:
+  init_args: {lr: 1.0e-3, weight_decay: 0.05}

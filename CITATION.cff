@@ -1,0 +1,10 @@
+cff-version: 1.2.0
+message: "If you use this software, please cite it as below."
+title: "LandClassification_BRIDGE: foundation-model ecosystem classification for the Andes–Amazon with Noah-MP integration"
+authors:
+  - family-names: Narvaez
+    given-names: Manuel
+version: 0.1.0
+license: Apache-2.0
+repository-code: "https://github.com/mbnarvae/LandClassification_BRIDGE"
+keywords: [land cover, foundation models, Prithvi, Andes, Amazon, páramo, Noah-MP, ecohydrology]

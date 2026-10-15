@@ -1,0 +1,14 @@
+# PLACEHOLDER extent — replace with your actual field site / watershed boundary.
+id: paramo_ec
+name: Northern Andes páramo — Ecuador
+country: EC
+bbox: [-78.60, -0.60, -77.90, 0.10]   # [min_lon, min_lat, max_lon, max_lat], EPSG:4326
+crs: EPSG:32717
+elevation_range_m: [1500, 5000]
+target_ecosystems: [paramo_grassland, montane_cloud_forest, montane_shrubland, polylepis_woodland, bofedal_peatland]
+seasons:
+  # Bimodal regime in the inter-Andean páramo; adjust per station data.
+  dry_season: ["06-01", "09-30"]
+  wet_season: ["02-01", "05-31"]
+label_sources: [field_plots, mapbiomas_ecuador, ministerio_ambiente_ecosystems]
+notes: "Páramo–cloud forest ecotone; strong east/west slope contrast."

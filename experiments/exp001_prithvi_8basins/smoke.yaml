@@ -1,0 +1,19 @@
+# Overlay for a quick wiring test on fake chips:  ./run_exp001.sh smoke b
+trainer:
+  max_epochs: 1
+  limit_train_batches: 3
+  limit_val_batches: 2
+  limit_test_batches: 2
+  default_root_dir: models_store/exp001_smoke
+  logger:
+    init_args: {save_dir: models_store/exp001_smoke}
+data:
+  init_args:
+    batch_size: 2
+    num_workers: 0
+    train_data_root: data/processed/fake_exp001/chips
+    val_data_root: data/processed/fake_exp001/chips
+    test_data_root: data/processed/fake_exp001/chips
+    train_split: data/processed/fake_exp001/splits/train.txt
+    val_split: data/processed/fake_exp001/splits/val.txt
+    test_split: data/processed/fake_exp001/splits/test.txt

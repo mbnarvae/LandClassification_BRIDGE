@@ -1,0 +1,57 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.eggs/
+build/
+dist/
+.venv/
+venv/
+.python-version
+.pytest_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+.ipynb_checkpoints/
+
+# IDEs
+.idea/
+.vscode/
+*.swp
+.DS_Store
+
+# Data & models (keep folder structure via .gitkeep)
+data/*
+!data/README.md
+!data/*/
+data/*/*
+!data/*/.gitkeep
+models_store/*
+!models_store/.gitkeep
+*.tif
+*.tiff
+*.nc
+*.zarr/
+*.h5
+*.ckpt
+*.pt
+*.pth
+*.safetensors
+*.npz
+lightning_logs/
+wandb/
+mlruns/
+
+# Autoresearch run artefacts (results.tsv IS committed)
+autoresearch/cache/
+autoresearch/run.log
+autoresearch/runs/
+
+# Secrets
+.env
+*.key
+credentials*.json
+.netrc
+
+# Claude Code local settings
+.claude/settings.local.json

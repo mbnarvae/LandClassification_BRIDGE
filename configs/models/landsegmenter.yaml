@@ -1,0 +1,7 @@
+# LandSegmenter — LULC foundation model. TODO: verify repo/weights/licence and input spec before use.
+name: landsegmenter
+framework: custom
+weights: TODO
+strategy: frozen_probe
+optim: {lr: 1.0e-4, weight_decay: 0.05, epochs: 30, batch_size: 8}
+loss: {name: ce, ignore_index: 0}

@@ -1,0 +1,16 @@
+# Conda alternative (useful on HPC / when GDAL wheels are problematic).
+#   conda env create -f environment.yml && conda activate bridge-lc
+name: bridge-lc
+channels:
+  - conda-forge
+dependencies:
+  - python=3.11
+  - gdal
+  - rasterio
+  - geopandas
+  - xarray
+  - rioxarray
+  - netcdf4
+  - pip
+  - pip:
+      - -e .[fm,boost,dev]

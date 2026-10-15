@@ -1,0 +1,46 @@
+# EXP001 — Prithvi-EO-2.0 fine-tuning over 8 Andean basins
+# Data-preparation config, read by scripts/exp001_build_dataset.py.
+# The TerraTorch training configs live next to this file (terratorch_*.yaml).
+id: exp001_prithvi_8basins
+
+basins:
+  path: data/external/basins/andes_8basins.shp   # ← PENDING: user will provide
+  id_field: null                                 # attribute with a unique basin id/name (null = row index)
+  expected: 8
+  buffer_m: 1000                                 # small buffer so chips at basin edges keep context
+
+imagery:
+  product: hls                                   # HLS S30 + L30 merged
+  bands: [BLUE, GREEN, RED, NIR_NARROW, SWIR_1, SWIR_2]   # Prithvi-EO-2.0 pretraining bands, this order
+  resolution_m: 30
+  year: 2023
+  # Two seasonal composites → Prithvi multi-temporal input (num_frames = 2).
+  # Generic Andean windows; refine per basin if regimes differ (bimodal north vs unimodal south).
+  seasons:
+    dry: ["06-01", "09-30"]
+    wet: ["12-01", "03-31"]                      # wraps the year: Dec(year-1) → Mar(year)
+  max_scene_cloud_pct: 80                        # pixel-level Fmask does the real masking
+  min_clear_obs: 2                               # pixels with fewer clear obs in a season → nodata
+
+labels:
+  # ← PENDING decision. Options: field plots + MapBiomas (preferred), national ecosystem maps,
+  # or ESA WorldCover as a coarse first pass. Must be a raster of BRIDGE legend ids (0 = nodata),
+  # or a source with a mapping in configs/legend/label_mappings/.
+  source: null
+  path: null
+
+chips:
+  size: 224                                      # 14×14 tokens of 16 px
+  stride: 224
+  min_valid_frac: 0.3                            # cloudy Andes: accept partially labelled chips
+
+split:
+  # Primary: spatial blocks inside every basin (each basin in train/val/test).
+  scheme: basin_blocks
+  block_size_m: 20160                            # 3×3 chips (224 px × 30 m × 3); shrink if basins are small
+  fractions: {train: 0.7, val: 0.15, test: 0.15}
+  seed: 42
+  # Secondary (transferability, run after the primary): leave-one-basin-out.
+  lobo: true
+
+output_dir: data/processed/exp001

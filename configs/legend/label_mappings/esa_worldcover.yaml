@@ -1,0 +1,16 @@
+# ESA WorldCover v200 (10 m) → BRIDGE legend.
+# Only unambiguous classes are mapped. Ambiguous ones (null) need disambiguation with elevation,
+# climate and regional ecosystem maps (e.g. tree cover → lowland vs. montane cloud forest vs. Polylepis).
+source: esa_worldcover_v200
+mapping:
+  10: null                # Tree cover            → disambiguate by elevation / cloud frequency
+  20: null                # Shrubland             → montane_shrubland vs dry_puna_shrub_grassland
+  30: null                # Grassland             → paramo vs humid/dry puna
+  40: cropland_pasture    # Cropland
+  50: urban_built         # Built-up
+  60: rock_scree_barren   # Bare / sparse vegetation
+  70: snow_ice_glacier    # Snow and ice
+  80: water               # Permanent water bodies
+  90: null                # Herbaceous wetland    → bofedal_peatland (high) vs lowland wetland
+  95: null                # Mangroves (not in test beds)
+  100: superparamo_sparse # Moss and lichen

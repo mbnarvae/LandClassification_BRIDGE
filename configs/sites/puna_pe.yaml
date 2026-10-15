@@ -1,0 +1,13 @@
+# PLACEHOLDER extent — replace with your actual field site / watershed boundary.
+id: puna_pe
+name: Central Andes puna & bofedales — Peru
+country: PE
+bbox: [-73.00, -14.00, -71.50, -12.80]
+crs: EPSG:32718
+elevation_range_m: [3000, 6000]
+target_ecosystems: [humid_puna_grassland, dry_puna_shrub_grassland, bofedal_peatland, snow_ice_glacier, rock_scree_barren, polylepis_woodland]
+seasons:
+  dry_season: ["05-01", "09-30"]
+  wet_season: ["12-01", "03-31"]
+label_sources: [field_plots, mapbiomas_peru, glacier_inventory]
+notes: "Glacier retreat and bofedal dynamics; strong unimodal rainfall seasonality."

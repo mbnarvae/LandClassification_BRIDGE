@@ -1,0 +1,13 @@
+# PLACEHOLDER extent — replace with your actual field site / watershed boundary.
+id: yungas_bo
+name: Bolivian Yungas to Amazon foreland
+country: BO
+bbox: [-68.20, -16.40, -67.20, -15.20]
+crs: EPSG:32719
+elevation_range_m: [300, 5500]
+target_ecosystems: [lowland_evergreen_forest, lowland_flooded_forest, premontane_forest, montane_cloud_forest, humid_puna_grassland, crop_natural_mosaic]
+seasons:
+  dry_season: ["05-01", "09-30"]
+  wet_season: ["11-01", "03-31"]
+label_sources: [field_plots, mapbiomas_bolivia, mapbiomas_amazonia]
+notes: "Full elevational transect → main test for Andes–Amazon transition zones."

@@ -1,0 +1,56 @@
+# BRIDGE Andes–Amazon hierarchical legend, v0 (DRAFT — to be refined with Becker et al. and field data)
+#
+# Each class carries:
+#   id            : integer label used in rasters/training (0 = nodata/ignore)
+#   level1        : broad functional group (stable across regions → global algorithm)
+#   igbp          : Noah-MP MODIS-IGBP (modified, 20-cat) code for the *standard* crosswalk
+#   noahmp_ext    : code in the *extended* Noah-MP table (21+ = new Andean parameter sets, see
+#                   docs/science/noahmp_integration.md). Equal to igbp when no new class is proposed.
+#   rationale     : why this class matters ecohydrologically
+#
+# Modified IGBP (Noah-MP, 20 cat): 1 ENF, 2 EBF, 3 DNF, 4 DBF, 5 Mixed forest, 6 Closed shrub,
+# 7 Open shrub, 8 Woody savanna, 9 Savanna, 10 Grassland, 11 Permanent wetland, 12 Cropland,
+# 13 Urban, 14 Crop/natural mosaic, 15 Snow & ice, 16 Barren, 17 Water, 18 Wooded tundra,
+# 19 Mixed tundra, 20 Barren tundra.
+
+name: bridge_andes
+version: 0.1.0
+nodata: 0
+
+classes:
+  - {id: 1,  name: lowland_evergreen_forest,   level1: forest,     igbp: 2,  noahmp_ext: 2,
+     rationale: "Amazon terra firme forest; high LAI, deep roots, high ET"}
+  - {id: 2,  name: lowland_flooded_forest,     level1: wetland,    igbp: 2,  noahmp_ext: 21,
+     rationale: "Várzea/igapó; seasonal inundation controls ET and runoff"}
+  - {id: 3,  name: premontane_forest,          level1: forest,     igbp: 2,  noahmp_ext: 2,
+     rationale: "~500–1500 m Andes–Amazon transition (foothill/yungas lower belt)"}
+  - {id: 4,  name: montane_cloud_forest,       level1: forest,     igbp: 2,  noahmp_ext: 22,
+     rationale: "Cloud immersion → fog interception, epiphyte storage, low ET; poorly represented by generic EBF"}
+  - {id: 5,  name: polylepis_woodland,         level1: forest,     igbp: 8,  noahmp_ext: 23,
+     rationale: "High-elevation woodland patches above treeline; distinct canopy and soil water"}
+  - {id: 6,  name: montane_shrubland,          level1: shrubland,  igbp: 6,  noahmp_ext: 6,
+     rationale: "Sub-páramo / ceja de montaña ecotone"}
+  - {id: 7,  name: paramo_grassland,           level1: grassland,  igbp: 10, noahmp_ext: 24,
+     rationale: "Tussock grass + rosettes on andosols with huge water retention; key water tower"}
+  - {id: 8,  name: humid_puna_grassland,       level1: grassland,  igbp: 10, noahmp_ext: 25,
+     rationale: "Seasonal high-Andean grassland; strong wet/dry seasonality"}
+  - {id: 9,  name: dry_puna_shrub_grassland,   level1: shrubland,  igbp: 7,  noahmp_ext: 7,
+     rationale: "Sparse, water-limited; high radiation load"}
+  - {id: 10, name: bofedal_peatland,           level1: wetland,    igbp: 11, noahmp_ext: 26,
+     rationale: "Cushion peatlands; buffer baseflow, near-saturated soils year-round"}
+  - {id: 11, name: superparamo_sparse,         level1: barren,     igbp: 19, noahmp_ext: 19,
+     rationale: "Sparse periglacial vegetation; tundra-like parameters"}
+  - {id: 12, name: rock_scree_barren,          level1: barren,     igbp: 16, noahmp_ext: 16,
+     rationale: "Bare rock / scree; fast runoff"}
+  - {id: 13, name: snow_ice_glacier,           level1: snow_ice,   igbp: 15, noahmp_ext: 15,
+     rationale: "Glaciers & permanent snow; melt contributions"}
+  - {id: 14, name: water,                      level1: water,      igbp: 17, noahmp_ext: 17,
+     rationale: "Lakes, rivers, reservoirs"}
+  - {id: 15, name: cropland_pasture,           level1: agriculture, igbp: 12, noahmp_ext: 12,
+     rationale: "Highland crops and cultivated pastures"}
+  - {id: 16, name: crop_natural_mosaic,        level1: agriculture, igbp: 14, noahmp_ext: 14,
+     rationale: "Fragmented agricultural frontier, common at the Andes–Amazon edge"}
+  - {id: 17, name: forest_plantation,          level1: forest,     igbp: 1,  noahmp_ext: 1,
+     rationale: "Pinus/Eucalyptus plantations in páramo/puna — strong hydrological impact"}
+  - {id: 18, name: urban_built,                level1: urban,      igbp: 13, noahmp_ext: 13,
+     rationale: "Built-up areas"}

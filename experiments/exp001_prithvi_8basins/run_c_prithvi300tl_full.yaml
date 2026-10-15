@@ -1,0 +1,32 @@
+# RUN C — same as B but full fine-tuning (all 300M encoder weights trainable). Needs a GPU with ≥24 GB.
+trainer:
+  logger:
+    init_args: {name: run_c_prithvi300tl_full}
+data:
+  init_args:
+    batch_size: 4
+    # Albumentations needs HWC: flatten frames into channels, augment, then restore (C, T, H, W).
+    train_transform:
+      - class_path: terratorch.datasets.transforms.FlattenTemporalIntoChannels
+      - class_path: albumentations.D4
+      - class_path: ToTensorV2
+      - class_path: terratorch.datasets.transforms.UnflattenTemporalFromChannels
+        init_args: {n_timesteps: 2}
+model:
+  init_args:
+    model_args:
+      backbone: prithvi_eo_v2_300_tl
+      backbone_pretrained: true
+      backbone_bands: [BLUE, GREEN, RED, NIR_NARROW, SWIR_1, SWIR_2]
+      backbone_num_frames: 2
+      backbone_coords_encoding: []
+      necks:
+        - {name: SelectIndices, indices: [5, 11, 17, 23]}
+        - {name: ReshapeTokensToImage, effective_time_dim: 2}
+        - {name: LearnedInterpolateToPyramidal}
+      decoder: UNetDecoder
+      decoder_channels: [512, 256, 128, 64]
+      head_dropout: 0.1
+      num_classes: 19
+optimizer:
+  init_args: {lr: 5.0e-5, weight_decay: 0.05}

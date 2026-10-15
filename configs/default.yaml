@@ -1,0 +1,38 @@
+# Global defaults. Site/model configs override these.
+project: BRIDGE
+legend: configs/legend/bridge_andes_v0.yaml
+
+paths:
+  raw: data/raw
+  interim: data/interim
+  processed: data/processed
+  labels: data/labels
+  external: data/external
+  models: models_store
+
+imagery:
+  # HLS is the native input of Prithvi-EO-2.0 (6 bands); S2 adds red-edge for Andean grasslands/wetlands.
+  source: hls            # hls | sentinel2 | landsat
+  bands: [BLUE, GREEN, RED, NIR_NARROW, SWIR_1, SWIR_2]
+  resolution_m: 30
+  max_cloud_pct: 40      # Andes are cloudy → rely on multi-temporal composites
+  composites: [dry_season, wet_season]
+  years: [2020, 2023]
+
+features:
+  indices: [ndvi, ndwi, ndmi, nbr, evi]
+  terrain: [elevation, slope, aspect_sin, aspect_cos, tpi, twi]
+  climate: [map_mm, mat_c, aridity_index, precip_seasonality, cloud_frequency]
+  dem: copernicus_glo30
+
+chips:
+  size: 224              # Prithvi native patch grid (16 px patches)
+  stride: 224
+  min_valid_frac: 0.5
+
+validation:
+  scheme: spatial_blocks
+  block_size_km: 10
+  n_folds: 5
+  seed: 42
+  primary_metric: macro_f1

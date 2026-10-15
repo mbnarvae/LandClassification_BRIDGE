@@ -1,0 +1,17 @@
+# Prithvi-EO-2.0 via TerraTorch (verified with terratorch 1.2.11). Builder: bridge_lc.models.prithvi.
+# Full training configs: experiments/exp001_prithvi_8basins/{base,run_*}.yaml
+name: prithvi_eo2
+framework: terratorch
+backbone: prithvi_eo_v2_300_tl     # also: prithvi_eo_v2_600_tl (best on GEO-Bench), prithvi_eo_v2_100_tl, _tiny_tl
+pretrained: true
+bands: [BLUE, GREEN, RED, NIR_NARROW, SWIR_1, SWIR_2]   # HLS v2, this order
+normalisation:                     # HLS reflectance ×10000
+  mean: [1087.0, 1342.0, 1433.0, 2734.0, 1958.0, 1363.0]
+  std: [2248.0, 2179.0, 2178.0, 1850.0, 1242.0, 1049.0]
+num_frames: 2                      # dry + wet season composites
+decoder: UNetDecoder               # UNet > UperNet for Prithvi (arXiv 2504.17397); UperNet also fails on MPS
+decoder_channels: [512, 256, 128, 64]
+strategy: lora                     # lora | full_finetune | frozen_probe (diagnostic only)
+lora: {r: 16, lora_alpha: 16, target_modules: [qkv.q_linear, qkv.v_linear, mlp.fc1, mlp.fc2]}
+optim: {optimizer: AdamW, lr: 1.0e-4, weight_decay: 0.1, scheduler: ReduceLROnPlateau, batch_size: 8, max_epochs: 80}
+loss: {name: ce, class_weights: inverse_sqrt_freq, ignore_index: 0}
