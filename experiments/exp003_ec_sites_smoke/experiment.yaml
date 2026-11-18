@@ -1,0 +1,48 @@
+# EXP003 — smoke test on two Ecuadorian sites (Antisana, Zhurucay): HLS → frozen Prithvi → k-means.
+# Question: how many MAATE ecosystems / land-cover classes does an unsupervised clustering of
+# Prithvi-EO-2.0 embeddings recognise, compared with a plain spectral baseline? One year only.
+# Read by scripts/exp003_ec_sites_smoke.py. Outputs go to data/processed/exp003 (git-ignored).
+id: exp003_ec_sites_smoke
+
+data_root: ~/Documents/Analisis_NoahMP/Organized_Database/Ecuador
+
+sites:
+  # Rectangles drawn by Manuel (EPSG:4326). The bounding box of each shape is used.
+  # Note: the file named "cuenca_antisana" is the Cuenca / Zhurucay rectangle (lat ≈ -3°).
+  - {id: ec_antisana, name: "Antisana (Quito)", shape: rectangles_landuse/rectangle_antisana.shp}
+  - {id: ec_zhurucay, name: "Zhurucay (Cuenca)", shape: rectangles_landuse/rectangle_cuenca_antisana.shp}
+crs: EPSG:32717
+
+references:
+  ecosystems: LandCover_Ecosystems/MAATE_ecosistemas/geodata/v_ge000_ecosistema_aPolygon.shp
+  ramsar: LandCover_Ecosystems/MAATE_humedales_ramsar/geodata/v_hc006_humedal_ramsar_aPolygon.shp
+  land_cover_glob: LandCover_Ecosystems/MAATE_cobertura_vegetal_{year}/geodata/*.shp
+  land_cover_years: [2000, 2008, 2014, 2016, 2018, 2020, 2022, 2024]
+  soil_points: soil_properties/Consolidado_2025_soil_properties.csv
+  compare_land_cover_year: 2022              # closest MAATE map to the imagery year
+
+imagery:
+  year: 2023
+  bands: [BLUE, GREEN, RED, NIR_NARROW, SWIR_1, SWIR_2]
+  resolution_m: 30
+  seasons:                                   # generic Andean windows, same as EXP001 (not tuned per site)
+    dry: ["06-01", "09-30"]
+    wet: ["12-01", "03-31"]                  # Dec(year-1) → Mar(year)
+  max_scene_cloud_pct: 80
+  min_clear_obs: 1
+
+embedding:
+  backbone: prithvi_eo_v2_300_tl
+  layers: [11, 23]                           # mid and last transformer block (0-based)
+  tile: 224
+  min_valid_frac: 0.8                        # per 16×16 patch, both seasons
+
+clustering:
+  k: [8, 12, 16, 24]
+  pca_dims: 50
+  min_purity: 0.6                            # patch reference label = majority class if ≥ this share
+  min_patches_per_class: 10                  # classes with fewer pure patches are not scored
+  recognised_f1: 0.5
+  seed: 42
+
+output_dir: data/processed/exp003
