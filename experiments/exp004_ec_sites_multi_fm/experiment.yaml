@@ -1,0 +1,33 @@
+# EXP004 — EXP003 repeated with several foundation models (Colab GPU smoke test).
+# Question: on the same two Ecuadorian sites (Antisana, Zhurucay), same HLS 2023 dry + wet composites and same
+# unsupervised protocol (frozen encoder → 480 m patch embeddings → PCA → k-means → majority mapping), does any
+# encoder recognise more MAATE ecosystems / land-cover classes than Prithvi-EO-2.0 300M or the spectral baseline?
+# Read by scripts/exp004_multi_fm_smoke.py. Sites, imagery, clustering and scoring come from EXP003 unchanged.
+id: exp004_ec_sites_multi_fm
+base: experiments/exp003_ec_sites_smoke/experiment.yaml
+
+# Inputs: EXP003 per-site folders holding hls_2023.tif and references.gpkg (built locally by
+# `python scripts/exp003_ec_sites_smoke.py refs hls`). On Colab they live on Google Drive: --inputs <dir>.
+inputs_dir: data/processed/exp003
+output_dir: data/processed/exp004
+
+# Encoders (names from bridge_lc.models.embeddings.EMBED_SPECS). All run in the main environment with
+# terratorch 1.2.11. Reference encoders (Satlas Swin-B Landsat, SSL4EO-L ResNet-50) are optional: their own
+# pretraining scaling differs from the HLS statistics used here. THOR and OlmoEarth need separate
+# environments and are not part of this run.
+models:
+  - prithvi_eo2_300_tl     # = EXP003 (sanity check: scores must reproduce EXP003)
+  - prithvi_eo2_600_tl
+  - terramind_v1_small
+  - terramind_v1_base
+  - dofa_base
+  - dofa_large
+optional_models:
+  - satlas_swin_b_landsat
+  - ssl4eol_resnet50
+
+embedding:
+  tile: 224
+  batch_size: 8            # tiles per forward pass; lower it if the GPU runs out of memory
+  amp: false               # float32 like EXP003; true = float16 autocast on CUDA (faster, small differences)
+  k_map: 16                # k used for the comparison maps and the per-group F1 figure
