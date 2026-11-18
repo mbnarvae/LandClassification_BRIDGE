@@ -93,6 +93,8 @@ def to_patch_grid(t, kind: str, grid: int, n_frames: int = 1):
     elif kind != "chw":
         raise ValueError(f"Unknown output kind {kind}")
     if t.shape[-1] != grid or t.shape[-2] != grid:
+        if t.device.type == "mps":  # MPS only pools between divisible sizes (16 → 14 is not)
+            t = t.cpu()
         t = F.adaptive_avg_pool2d(t, grid)
     return t.permute(0, 2, 3, 1)
 
